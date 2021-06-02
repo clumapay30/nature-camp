@@ -1,0 +1,18 @@
+.showMap {
+    width: 100%; 
+    height: 650px
+}
+
+.indexMap {
+    width: 100%; 
+    height: 700px;
+}
+
+@media screen and (max-width: 766px) {
+    .col-6 {
+        width: 766px;
+    }
+    .showMap {
+        width: 100%;
+    }
+}

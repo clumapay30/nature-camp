@@ -1,0 +1,81 @@
+<% layout('/layouts/boilerplate') %>
+
+<div class="row">
+    <h1 class="text-center">Edit Campground</h1>
+    <div class="col-6 offset-3">
+        <form action="/campgrounds/<%= campground._id%>?_method=PUT" method="POST" class="needs-validation" novalidate
+            enctype="multipart/form-data">
+            <div class="mb-3">
+                <label for="title" class="form-label">Title</label>
+                <input type="text" class="form-control" id="title" name="campground[title]"
+                    value="<%= campground.title %>" required>
+                <div class="valid-feedback">
+                    Looks good!
+                </div>
+            </div>
+            <div class="mb-3">
+                <label for="location" class="form-label">locations</label>
+                <input type="text" class="form-control" id="location" name="campground[location]"
+                    value="<%= campground.location %>" required>
+            </div>
+
+            <div class="input-group mb-3">
+                <input type="file" class="form-control" id="inputGroupFile02" name="image" multiple>
+                <div class="invalid-feedback">Please provide a valid file</div>
+
+            </div>
+            <!-- <div class="mb-3">
+                <label for="image" class="form-label">Add New Images</label>
+                <input type="file" name="image" id="image" multiple>
+                <!-- <input type="text" class="form-control" id="image" name="campground[image]" value="<campground. imagerequired
+                <div class="invalid-feedback">Please provide a valid file</div>
+                <div class="valid-feedback">
+                    Looks good!
+                </div>
+            </div> -->
+
+            <div class="mb-3">
+                <label for="description" class="form-label">Description</label>
+                <textarea type="text" class="form-control" id="description" name="campground[description]"
+                    required><%= campground.description %></textarea>
+            </div>
+
+            <div class="col-md-6 mb-3">
+                <label for="price" class="form-label">Price</label>
+                <div class="input-group has-validation">
+                    <span class="input-group-text" id="inputGroupPrepend3">$</span>
+                    <input type="text" class="form-control" id="price" name="campground[price]"
+                        aria-describedby="inputGroupPrepend3 validationServerUsernameFeedback"
+                        value="<%= campground.price %>" required>
+                    <div id="validationServerUsernameFeedback" class="invalid-feedback">
+                        Please provide a price
+                    </div>
+                </div>
+            </div>
+            <div class="mb-3">
+                <% campground.images.forEach(function (img, i) { %>
+                    <img src="<%=img.thumbnail%>" class="img-thumbnail" alt="">
+                    <div class="form-check-inline">
+                        <input type="checkbox" id="image-<%=i%>" name="deleteImages[]" value="<%=img.filename%>">
+
+                        <label for="image-<%=i%>"><b>DELETE?</b></label>
+                    </div>
+                <% }) %>
+            </div>
+
+            <div class="col-12 mb-3">
+                <div class="form-check">
+                    <input class="form-check-input" type="checkbox" value="" id="invalidCheck" required>
+                    <label class="form-check-label" for="invalidCheck">
+                        Agree to terms and conditions
+                    </label>
+                    <div class="invalid-feedback">
+                        You must agree before submitting.
+                    </div>
+                </div>
+            </div>
+            <button class="btn btn-warning">Update Campground</button>
+        </form><br>
+        <a class="btn btn-info" href="/campgrounds/<%= campground._id %> "">Back To Profile</a>
+    </div>
+</div>
