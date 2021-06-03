@@ -29,9 +29,12 @@ const campgrounds = require('./src/routes/campgrounds')
 const reviews = require('./src/routes/reviews');
 const { contentSecurityPolicy } = require('helmet');
 
-
 // Database
-mongoose.connect('mongodb://localhost:27017/nature-camp', {
+const dbUrl = process.env.DB_URL || 'mongodb://localhost:27017/nature-camp'
+// const dbUrl = process.env.DB_URL
+const MongoStore  = require('connect-mongo')
+
+mongoose.connect(dbUrl, {
     useNewUrlParser: true,
     useCreateIndex: true,
     useUnifiedTopology: true,
@@ -46,11 +49,6 @@ mongoose.connect('mongodb://localhost:27017/nature-camp', {
         console.log("OH NO MONGO CONNECTION ERROR!!!!")
         console.log(err)
     })
-
-
-
-
-
 
 // For template
 app.engine('ejs', ejsMate)
@@ -70,10 +68,22 @@ app.use(mongoSanitize({
     replaceWith: 'please-dont!-',
 }));
 
+const secret = process.env.SECRET || 'thisissecret'
+const store = MongoStore.create({
+    mongoUrl: dbUrl,
+    secret,
+    touchAfter: 24 * 60 * 60 // 24 hours * 60 minutes * 60 seconds
+})
+
+store.on('error', function(e) {
+    console.log('SESSION STORE ERROR!')
+})
+
 // express session
 const sessionConfig = {
+    store,
     name: 'session',
-    secret: 'thisissecret',
+    secret,
     resave: false,
     saveUninitialized: true,
     cookie: {
